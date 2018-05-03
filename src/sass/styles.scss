@@ -1,1 +1,12 @@
 @import './variables';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+html, body {
+  height: 100%;
+  background: $body-background-color !important;
+}
+
+.no-padding {
+  padding: 0px !important;
+}

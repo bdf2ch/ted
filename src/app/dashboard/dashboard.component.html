@@ -1,0 +1,53 @@
+<mat-sidenav-container id="dashboard-wrapper"  [class.is-mobile]="isHandset || isTabletLandscape">
+
+  <!-- Start: Side Navigation -->
+  <mat-sidenav [opened]="sideNavOpened"
+               [mode]="isHandset || isTabletLandscape ? 'over' : 'side'"
+               class="sidenav-container"
+               (closedStart)="onCloseSideBar()">
+
+    <nav class="navbar fixed-top navbar-light bg-light">
+      <a class="navbar-brand" href="#">Company name</a>
+    </nav>
+
+  </mat-sidenav>
+  <!-- End: Side Navigation -->
+
+
+  <!-- Start: Content -->
+  <mat-sidenav-content class="dashboard-content">
+    <nav class="navbar fixed-top navbar-light bg-light d-flex justify-content-between">
+      <button mat-icon-button (click)="openSideBar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button mat-button>John Doe</button>
+    </nav>
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-12">
+          <mat-card>
+            <mat-card-title class="h6 text-muted text-uppercase">COSTS</mat-card-title>
+            <mat-card-content><h3>52392.04 $</h3></mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <mat-card>
+            <mat-card-title class="h6 text-muted text-uppercase">STUFF COASTS BREAKDOWN</mat-card-title>
+            <mat-card-content><h3>52392.04 $</h3></mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+    </div>
+  </mat-sidenav-content>
+  <!-- End: Content -->
+
+</mat-sidenav-container>
+
+<router-outlet></router-outlet>

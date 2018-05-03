@@ -1,0 +1,51 @@
+#dashboard-wrapper {
+  position: absolute;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+mat-sidenav {
+  width: 250px;
+}
+
+
+.dashboard-content {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  padding-top: 76px !important;
+  .navbar {
+    background: white !important;
+  }
+}
+
+.is-mobile .sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
+
+.sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid lightgrey;
+  .navbar {
+    margin-left: 10px;
+    margin-right: 10px;
+    background: white !important;
+    border-bottom: 1px solid lightgrey;
+  }
+}
+
+.is-mobile .sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
