@@ -10,12 +10,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 import { AppComponent } from './app.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HourlyRateDialogComponent } from './dashboard/components/hourly-rate-dialog/hourly-rate-dialog.component';
 
 
 const routes: Routes = [
@@ -43,7 +46,8 @@ const routes: Routes = [
     AppComponent,
     RegistrationComponent,
     AuthenticationComponent,
-    DashboardComponent
+    DashboardComponent,
+    HourlyRateDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +61,12 @@ const routes: Routes = [
     MatInputModule,
     MatButtonModule,
     MatSidenavModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatDialogModule
+  ],
+  entryComponents: [
+    HourlyRateDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

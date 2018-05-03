@@ -10,6 +10,29 @@
       <a class="navbar-brand" href="#">Company name</a>
     </nav>
 
+    <div class="sidemenu-content container-fluid">
+      <div class="row">
+        <div class="col-12 pt-2">
+          <span class="project-link">All projects</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pt-2">
+          <span class="project-link">Project #1</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pt-2">
+          <span class="project-link">Project #2</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pt-2">
+          <span class="project-link">Project #3</span>
+        </div>
+      </div>
+    </div>
+
   </mat-sidenav>
   <!-- End: Side Navigation -->
 
@@ -39,7 +62,42 @@
         <div class="col-12">
           <mat-card>
             <mat-card-title class="h6 text-muted text-uppercase">STUFF COASTS BREAKDOWN</mat-card-title>
-            <mat-card-content><h3>52392.04 $</h3></mat-card-content>
+            <mat-card-content>
+              <mat-table #table [dataSource]="data" class="costs-table">
+
+                <!-- Developer Column -->
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef> DEVELOPER </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <div class="d-flex align-items-center">
+                      <mat-icon class="mr-2" (click)="openHourlyRateDialog(element)">settings</mat-icon> {{ element.name }}
+                    </div>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="hourlyRate">
+                  <mat-header-cell *matHeaderCellDef> HOURLY RATE </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.hourlyRate }}$ </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="hoursSpent">
+                  <mat-header-cell *matHeaderCellDef> HOURS SPENT </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.hoursSpent }} </mat-cell>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="costs">
+                  <mat-header-cell *matHeaderCellDef> COSTS </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.hourlyRate * element.hoursSpent }}$ </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+
+            </mat-card-content>
           </mat-card>
         </div>
       </div>

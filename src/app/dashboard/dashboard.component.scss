@@ -49,3 +49,28 @@ mat-sidenav {
   flex: 1 0 auto;
 }
 
+.sidemenu-content {
+  padding-top: 76px;
+
+  .project-link {
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #B0BEC5;
+    &:hover {
+      color: #546E7A;
+    }
+  }
+}
+
+
+
+.costs-table {
+  mat-icon {
+    color: #CFD8DC;
+    cursor: pointer;
+    &:hover {
+      color: #90A4AE;
+    }
+  }
+}
+

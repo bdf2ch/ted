@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material';
+import {HourlyRateDialogComponent} from './components/hourly-rate-dialog/hourly-rate-dialog.component';
+import {IDeveloper} from '../shared/interfaces/developer.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,9 +15,42 @@ export class DashboardComponent implements OnInit {
   isHandset: boolean;
   isTabletLandscape: boolean;
   isDesktop: boolean;
+  data: IDeveloper[] = [
+    {
+      name: 'Developer 1',
+      hourlyRate: 10,
+      hoursSpent: 14,
+      costs: 0
+    },
+    {
+      name: 'Developer 2',
+      hourlyRate: 12,
+      hoursSpent: 20,
+      costs: 0
+    },
+    {
+      name: 'Developer 3',
+      hourlyRate: 8,
+      hoursSpent: 32,
+      costs: 0
+    },
+    {
+      name: 'Developer 4',
+      hourlyRate: 15,
+      hoursSpent: 40,
+      costs: 0
+    }
+  ]
+  displayedColumns = ['name', 'hourlyRate', 'hoursSpent', 'costs'];
+  selectedDeveloper: IDeveloper | null;
 
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, breakpointObserver: BreakpointObserver) {
+  constructor(changeDetectorRef: ChangeDetectorRef,
+              media: MediaMatcher,
+              breakpointObserver: BreakpointObserver,
+              public dialog: MatDialog) {
+    this.selectedDeveloper = null;
+
     breakpointObserver.observe([
       Breakpoints.Web
     ]).subscribe(result => {
@@ -63,5 +99,14 @@ export class DashboardComponent implements OnInit {
   onCloseSideBar() {
     console.log('close side bar');
     this.sideNavOpened = false;
+  }
+
+
+  openHourlyRateDialog(developer: IDeveloper) {
+    this.selectedDeveloper = developer;
+    this.dialog.open(HourlyRateDialogComponent, {
+      width: '300px',
+      data: {developer: developer}
+    });
   }
 }
