@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { AccountResource } from './shared/resources/account.resource';
 import { AccountService } from './shared/services/account.service';
 import { CompanyResource } from './shared/resources/company.resource';
 import { CompanyService } from './shared/services/company.service';
+import { AuthenticationGuard } from './shared/guards/authentication.guard';
 
 
 const routes: Routes = [
@@ -75,7 +77,8 @@ const routes: Routes = [
     MatTableModule,
     MatDialogModule,
     MatStepperModule,
-    MatSelectModule
+    MatSelectModule,
+    MatProgressSpinnerModule
   ],
   entryComponents: [
     HourlyRateDialogComponent
@@ -84,7 +87,8 @@ const routes: Routes = [
     AccountResource,
     AccountService,
     CompanyResource,
-    CompanyService
+    CompanyService,
+    AuthenticationGuard
   ],
   bootstrap: [AppComponent]
 })

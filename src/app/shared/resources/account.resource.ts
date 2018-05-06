@@ -14,11 +14,18 @@ export class AccountResource extends Resource {
   }
 
   @ResourceAction({
+    method: ResourceRequestMethod.Get,
+    path: '/',
+    withCredentials: true
+  })
+  check: IResourceMethod<void, IUser>;
+
+  @ResourceAction({
     method: ResourceRequestMethod.Post,
     path: '/register',
     withCredentials: true
   })
-  register: IResourceMethod<{email: string, password: string}, IUser | null>;
+  register: IResourceMethod<IUser, IUser | null>;
 
   @ResourceAction({
     method: ResourceRequestMethod.Post,

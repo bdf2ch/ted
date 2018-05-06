@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, ValidatorFn, Validators, FormBuilder, FormGroup } from '@angular/forms';
-import {AccountService} from "../shared/services/account.service";
+import { AccountService } from '../shared/services/account.service';
+import { CompanyService } from '../shared/services/company.service';
+import { ICompany } from '../shared/interfaces/company.interface';
+import { IUser } from '../shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-registration',
@@ -8,43 +11,52 @@ import {AccountService} from "../shared/services/account.service";
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  public userRegistrationData = {
+  public userRegistrationData: IUser = {
     firstName: '',
     lastName: '',
-    email: '',
+    emailAddress: '',
     password: '',
     confirmPassword: ''
   };
-  public companyRegistrationData = {
+  public companyRegistrationData: ICompany = {
     companyName: '',
-    serviceType: '',
-    serviceUrl: '',
-    serviceAPIKey: ''
+    credentialsType: '',
+    credentialsUrl: '',
+    credentialsApiKey: ''
   };
-  public password: FormControl = new FormControl(this.userRegistrationData.password, Validators.required);
+  public password: FormControl = new FormControl(
+    this.userRegistrationData.password,
+    [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(100)
+    ]
+  );
   public firstStepFormGroup: FormGroup;
   public secondStepFormGroup: FormGroup;
   public serviceTypes: any[];
 
 
   constructor(private builder: FormBuilder,
-              private account: AccountService) {
+              public account: AccountService,
+              public company: CompanyService) {
     this.serviceTypes = [
       {id: 1, title: 'Teamwork'},
       {id: 2, title: 'Jira'}
     ];
+    this.companyRegistrationData.credentialsType = this.serviceTypes[0];
     this.firstStepFormGroup = this.builder.group({
       firstName: [this.userRegistrationData.firstName, Validators.required],
       lastName: [this.userRegistrationData.lastName, Validators.required],
-      email: [this.userRegistrationData.email, [Validators.required, Validators.email]],
+      emailAddress: [this.userRegistrationData.emailAddress, [Validators.required, Validators.email]],
       password: this.password,
       confirmPassword: [this.userRegistrationData.confirmPassword, [Validators.required, this.passwordMismatchValidator(this.password)]]
     });
     this.secondStepFormGroup = this.builder.group({
       companyName: [this.companyRegistrationData.companyName, Validators.required],
-      serviceType: [{value: this.serviceTypes[0], disabled: true}, Validators.required],
-      serviceUrl: [this.companyRegistrationData.serviceUrl, Validators.required],
-      serviceAPIKey: [this.companyRegistrationData.serviceAPIKey, Validators.required]
+      credentialsType: [{value: this.serviceTypes[0], disabled: true}, Validators.required],
+      credentialsUrl: [this.companyRegistrationData.credentialsUrl, Validators.required],
+      credentialsApiKey: [this.companyRegistrationData.credentialsApiKey, Validators.required]
     });
   }
 
@@ -68,11 +80,21 @@ export class RegistrationComponent implements OnInit {
   }
 
   /**
+   * Returns error message for email field
+   * @returns {string}
+   */
+  getEmailErrorMessage() {
+    return this.firstStepFormGroup.get('emailAddress').hasError('required') ? 'Please, enter your email' :
+      this.firstStepFormGroup.get('emailAddress').hasError('email') ? 'Email is not valid' : '';
+  }
+
+  /**
    * Returns error message for password field
    * @returns {string}
    */
   getPasswordErrorMessage() {
-    return this.password.hasError('required') ? 'Please, enter your password' : '';
+    return this.password.hasError('required') ? 'Please, enter your password' :
+      this.password.hasError('minlength') ? 'Password must be at least 8 symbols' : '';
   }
 
   /**
@@ -111,7 +133,7 @@ export class RegistrationComponent implements OnInit {
    * @returns {string}
    */
   getServiceUrlErrorMessage() {
-    return this.secondStepFormGroup.get('serviceUrl').hasError('required') ? 'Please, enter service URL' : '';
+    return this.secondStepFormGroup.get('credentialsUrl').hasError('required') ? 'Please, enter service URL' : '';
   }
 
   /**
@@ -119,13 +141,13 @@ export class RegistrationComponent implements OnInit {
    * @returns {string}
    */
   getServiceAPIKeyErrorMessage() {
-    return this.secondStepFormGroup.get('serviceAPIKey').hasError('required') ? 'Please, enter service API key' : '';
+    return this.secondStepFormGroup.get('credentialsApiKey').hasError('required') ? 'Please, enter service API key' : '';
   }
 
   async register() {
-    const user = await this.account.register(this.userRegistrationData.email, this.userRegistrationData.password);
+    const user = await this.account.register(this.userRegistrationData);
     if (user) {
-      //const company
+      const company = await this.company.add(this.companyRegistrationData);
     }
   }
 }

@@ -9,9 +9,9 @@ export class Company {
 
   constructor (config?: ICompany) {
     this.id = config ? config.id : 0;
-    this.name = config ? config.CompanyName : '';
-    this.serviceType = config ? config.CredentialsType : '';
-    this.serviceURL = config ? config.CredentialsUrl : '';
-    this.serviceAPIKey = config ? config.CredentialsApiKey : '';
+    this.name = config ? config.companyName : '';
+    this.serviceType = config ? config.credentialsType : '';
+    this.serviceURL = config ? config.credentialsUrl : '';
+    this.serviceAPIKey = config ? config.credentialsApiKey : '';
   }
 }

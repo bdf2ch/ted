@@ -31,7 +31,9 @@
                 <button mat-raised-button
                         type="submit"
                         color="primary"
-                        class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4" (click)="logIn()">
+                        class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4"
+                        [disabled]="authFormGroup.invalid"
+                        (click)="logIn()">
                   Login
                 </button>
               </div>

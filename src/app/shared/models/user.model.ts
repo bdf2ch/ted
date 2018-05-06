@@ -8,6 +8,6 @@ export class User {
   constructor(config?: IUser) {
     this.firstName = config ? config.firstName : '';
     this.lastName = config ? config.lastName : '';
-    this.email = config ? config.email : '';
+    this.email = config ? config.emailAddress : '';
   }
 }

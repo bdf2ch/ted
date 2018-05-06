@@ -8,7 +8,7 @@
         <mat-card-content>
           <div class="container-fluid no-padding">
 
-            <mat-horizontal-stepper [linear]="false">
+            <mat-horizontal-stepper [linear]="true">
 
               <!-- Start: User registration -->
               <mat-step [stepControl]="firstStepFormGroup">
@@ -19,7 +19,7 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 no-padding">
-                        <input matInput placeholder="First name" formControlName="firstName" required>
+                        <input matInput placeholder="First name" formControlName="firstName" [(ngModel)]="userRegistrationData.firstName" required>
                         <mat-error *ngIf="firstStepFormGroup.get('firstName').invalid">{{ getFirstNameErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
@@ -30,18 +30,29 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 no-padding">
-                        <input matInput placeholder="Last name" formControlName="lastName" required>
+                        <input matInput placeholder="Last name" formControlName="lastName" [(ngModel)]="userRegistrationData.lastName" required>
                         <mat-error *ngIf="firstStepFormGroup.get('lastName').invalid">{{ getLastNameErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
                   <!-- End: Last name -->
 
+                  <!-- Start: Email -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 no-padding">
+                        <input matInput placeholder="E-mail" formControlName="emailAddress" [(ngModel)]="userRegistrationData.emailAddress" required>
+                        <mat-error *ngIf="firstStepFormGroup.get('emailAddress').invalid">{{ getEmailErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Email -->
+
                   <!-- Start: Password -->
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 pt-2 no-padding">
-                        <input matInput type="password" placeholder="Password" formControlName="password" required>
+                        <input matInput type="password" placeholder="Password" formControlName="password" [(ngModel)]="userRegistrationData.password" maxlength="100" required>
                         <mat-error *ngIf="firstStepFormGroup.get('password').invalid">{{ getPasswordErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
@@ -94,7 +105,7 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 no-padding">
-                        <input matInput placeholder="Company name" formControlName="companyName" required>
+                        <input matInput placeholder="Company name" formControlName="companyName" [(ngModel)]="companyRegistrationData.companyName" required>
                         <mat-error *ngIf="secondStepFormGroup.get('companyName').invalid">{{ getCompanyNameErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
@@ -105,10 +116,10 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 pt-2 no-padding">
-                        <mat-select formControlName="serviceType" placeholder="Service type" required [ngModel]="serviceTypes[0]">
+                        <mat-select formControlName="credentialsType" placeholder="Service type" required [(ngModel)]="companyRegistrationData.credentialsType">
                           <mat-option *ngFor="let service of serviceTypes" [value]="service">{{ service.title }}</mat-option>
                         </mat-select>
-                        <mat-error *ngIf="secondStepFormGroup.get('serviceType').invalid">{{ getPasswordErrorMessage() }}</mat-error>
+                        <mat-error *ngIf="secondStepFormGroup.get('credentialsType').invalid">{{ getPasswordErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -118,8 +129,8 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 pt-2 no-padding">
-                        <input matInput placeholder="Service URL" formControlName="serviceUrl" required>
-                        <mat-error *ngIf="secondStepFormGroup.get('serviceUrl').invalid">{{ getServiceUrlErrorMessage() }}</mat-error>
+                        <input matInput placeholder="Service URL" formControlName="credentialsUrl" [(ngModel)]="companyRegistrationData.credentialsUrl" required>
+                        <mat-error *ngIf="secondStepFormGroup.get('credentialsUrl').invalid">{{ getServiceUrlErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -129,8 +140,8 @@
                   <div class="row no-gutters">
                     <div class="col-12">
                       <mat-form-field class="col-12 pt-2 no-padding">
-                        <input matInput placeholder="Service API key" formControlName="serviceAPIKey" required>
-                        <mat-error *ngIf="secondStepFormGroup.get('serviceAPIKey').invalid">{{ getServiceAPIKeyErrorMessage() }}</mat-error>
+                        <input matInput placeholder="Service API key" formControlName="credentialsApiKey" [(ngModel)]="companyRegistrationData.credentialsApiKey" required>
+                        <mat-error *ngIf="secondStepFormGroup.get('credentialsApiKey').invalid">{{ getServiceAPIKeyErrorMessage() }}</mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -138,13 +149,23 @@
 
                   <!-- Start: Register button -->
                   <div class="row no-gutters">
-                    <div class="col-12 text-center pt-4">
+                    <div class="col-12 text-center pt-4 d-flex justify-content-center align-items-center">
                       <button mat-raised-button
                               type="submit"
                               color="primary"
-                              class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4"
+                              class="col-12 col-sm-10 col-md-6 col-lg-6 col-xl-6"
+                              [disabled]="secondStepFormGroup.invalid || account.registrationInProgress()"
                               (click)="register()">
-                        Register
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                          <mat-spinner
+                            [diameter]="20"
+                            [mode]="'indeterminate'"
+                            class="mr-3"
+                            [color]="'primary'"
+                            *ngIf="account.registrationInProgress()"></mat-spinner>
+                          <span *ngIf="!account.registrationInProgress()">Register</span>
+                          <span *ngIf="account.registrationInProgress()">Registration...</span>
+                        </div>
                       </button>
                     </div>
                   </div>
