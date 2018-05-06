@@ -1,4 +1,7 @@
+$registration-card-width: 450px;
+
 #registration {
+  width: $registration-card-width;
   mat-card-title {
     color: #90A4AE !important;
     font-size: 0.9rem;

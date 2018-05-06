@@ -1,6 +1,6 @@
 <form class="container-fluid h-100">
   <div class="h-100 row d-flex flex-row justify-content-center align-items-center">
-    <div id="registration" class="col-11 col-sm-10 col-md-6 col-lg-6 col-xl-4">
+    <div id="registration" class="col-11 col-sm-10 col-md-7 col-lg-7 col-xl-5">
       <mat-card>
         <mat-card-title class="h6 text-muted text-uppercase">
           <strong>Registration</strong>
@@ -8,60 +8,162 @@
         <mat-card-content>
           <div class="container-fluid no-padding">
 
-            <div class="row no-gutters">
-              <div class="col-12">
-                <mat-form-field class="col-12 no-padding">
-                  <input matInput placeholder="E-mail" [formControl]="email" [(ngModel)]="registrationData.email" required>
-                  <mat-error *ngIf="email.invalid">{{ getEmailErrorMessage() }}</mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+            <mat-horizontal-stepper [linear]="false">
 
-            <div class="row no-gutters">
-              <div class="col-12">
-                <mat-form-field class="col-12 pt-2 no-padding">
-                  <input matInput placeholder="System name" [formControl]="systemName" [(ngModel)]="registrationData.systemName" required>
-                  <mat-error *ngIf="systemName.invalid">{{ getSystemNameErrorMessage() }}</mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+              <!-- Start: User registration -->
+              <mat-step [stepControl]="firstStepFormGroup">
+                <form class="container-fluid h-100" [formGroup]="firstStepFormGroup">
+                  <ng-template matStepLabel>Fill out your personal info</ng-template>
 
+                  <!-- Start: First name -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 no-padding">
+                        <input matInput placeholder="First name" formControlName="firstName" required>
+                        <mat-error *ngIf="firstStepFormGroup.get('firstName').invalid">{{ getFirstNameErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: First name -->
 
-            <div class="row no-gutters">
-              <div class="col-12">
-                <mat-form-field class="col-12 pt-2 no-padding">
-                  <input matInput type="password" placeholder="Password" [formControl]="password" [(ngModel)]="registrationData.password" required>
-                  <mat-error *ngIf="password.invalid">{{ getPasswordErrorMessage() }}</mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+                  <!-- Start: Last name -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 no-padding">
+                        <input matInput placeholder="Last name" formControlName="lastName" required>
+                        <mat-error *ngIf="firstStepFormGroup.get('lastName').invalid">{{ getLastNameErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Last name -->
 
-            <div class="row no-gutters">
-              <div class="col-12">
-                <mat-form-field class="col-12 pt-2 no-padding">
-                  <input matInput type="password" placeholder="Confirm password" [formControl]="confirmPassword" [(ngModel)]="registrationData.confirmPassword" required>
-                  <mat-error *ngIf="confirmPassword.invalid">{{ getConfirmPasswordErrorMessage() }}</mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+                  <!-- Start: Password -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 pt-2 no-padding">
+                        <input matInput type="password" placeholder="Password" formControlName="password" required>
+                        <mat-error *ngIf="firstStepFormGroup.get('password').invalid">{{ getPasswordErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Password -->
 
-            <div class="row no-gutters">
-              <div class="col-12 text-center pt-4">
-               <button mat-raised-button
-                       type="submit"
-                       color="primary"
-                       class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4">
-                 Register
-               </button>
-              </div>
-            </div>
+                  <!-- Start: Confirm password -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 pt-2 no-padding">
+                        <input matInput type="password" placeholder="Confirm password" formControlName="confirmPassword" required>
+                        <mat-error *ngIf="firstStepFormGroup.get('confirmPassword').invalid">{{ getConfirmPasswordErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Confirm password -->
 
-            <div class="row">
-              <div class="col-12 text-center pt-3">
-                <span class="text-uppercase text-black-50">Already registered?</span>
-                <a href="" routerLink="/authentication"><strong>LOG IN</strong></a>
-              </div>
-            </div>
+                  <!-- Start: Go to next step button -->
+                  <div class="row pt-4">
+                    <div class="col-12 text-center">
+                      <button mat-raised-button
+                              class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4"
+                              [color]="'primary'"
+                              matStepperNext>
+                        Go to next step
+                      </button>
+                    </div>
+                  </div>
+                  <!-- End: Go to next step button -->
+
+                  <!-- Start: Log In link -->
+                  <div class="row pt-4">
+                    <div class="col-12 text-center">
+                      <span class="text-uppercase text-black-50">Already registered?</span>
+                      <a href="" routerLink="/authentication"><strong>LOG IN</strong></a>
+                    </div>
+                  </div>
+                  <!-- End: Log In link -->
+
+                </form>
+              </mat-step>
+              <!-- End: User registration -->
+
+              <!-- Start: Company registration -->
+              <mat-step [stepControl]="secondStepFormGroup">
+                <form class="container-fluid h-100" [formGroup]="secondStepFormGroup">
+                  <ng-template matStepLabel>Fill out info about your company</ng-template>
+
+                  <!-- Start: Company name -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 no-padding">
+                        <input matInput placeholder="Company name" formControlName="companyName" required>
+                        <mat-error *ngIf="secondStepFormGroup.get('companyName').invalid">{{ getCompanyNameErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Company name -->
+
+                  <!-- Start: Service type -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 pt-2 no-padding">
+                        <mat-select formControlName="serviceType" placeholder="Service type" required [ngModel]="serviceTypes[0]">
+                          <mat-option *ngFor="let service of serviceTypes" [value]="service">{{ service.title }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="secondStepFormGroup.get('serviceType').invalid">{{ getPasswordErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Service type -->
+
+                  <!-- Start: Service URL -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 pt-2 no-padding">
+                        <input matInput placeholder="Service URL" formControlName="serviceUrl" required>
+                        <mat-error *ngIf="secondStepFormGroup.get('serviceUrl').invalid">{{ getServiceUrlErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Service URL -->
+
+                  <!-- Start: Service API key -->
+                  <div class="row no-gutters">
+                    <div class="col-12">
+                      <mat-form-field class="col-12 pt-2 no-padding">
+                        <input matInput placeholder="Service API key" formControlName="serviceAPIKey" required>
+                        <mat-error *ngIf="secondStepFormGroup.get('serviceAPIKey').invalid">{{ getServiceAPIKeyErrorMessage() }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- End: Service API key -->
+
+                  <!-- Start: Register button -->
+                  <div class="row no-gutters">
+                    <div class="col-12 text-center pt-4">
+                      <button mat-raised-button
+                              type="submit"
+                              color="primary"
+                              class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4"
+                              (click)="register()">
+                        Register
+                      </button>
+                    </div>
+                  </div>
+                  <!-- End: Register button -->
+
+                  <!-- Start: Log In link -->
+                  <div class="row pt-4">
+                    <div class="col-12 text-center">
+                      <span class="text-uppercase text-black-50">Already registered?</span>
+                      <a href="" routerLink="/authentication"><strong>LOG IN</strong></a>
+                    </div>
+                  </div>
+                  <!-- End: Log In link -->
+
+                </form>
+              </mat-step>
+              <!-- End: Company registration -->
+
+            </mat-horizontal-stepper>
 
           </div>
         </mat-card-content>

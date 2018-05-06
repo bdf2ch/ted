@@ -1,30 +1,95 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidatorFn, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {AccountService} from "../shared/services/account.service";
 
 @Component({
-  selector: 'app-registartion',
+  selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  public registrationData = {
+  public userRegistrationData = {
+    firstName: '',
+    lastName: '',
     email: '',
-    systemName: '',
     password: '',
     confirmPassword: ''
   };
-  public email: FormControl = new FormControl('', [Validators.email, Validators.required]);
-  public systemName: FormControl = new FormControl('', Validators.required);
-  public password: FormControl = new FormControl('', Validators.required);
-  public confirmPassword: FormControl = new FormControl('', [Validators.required, this.passwordsMatchValidator(this.password)]);
+  public companyRegistrationData = {
+    companyName: '',
+    serviceType: '',
+    serviceUrl: '',
+    serviceAPIKey: ''
+  };
+  public password: FormControl = new FormControl(this.userRegistrationData.password, Validators.required);
+  public firstStepFormGroup: FormGroup;
+  public secondStepFormGroup: FormGroup;
+  public serviceTypes: any[];
 
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private builder: FormBuilder,
+              private account: AccountService) {
+    this.serviceTypes = [
+      {id: 1, title: 'Teamwork'},
+      {id: 2, title: 'Jira'}
+    ];
+    this.firstStepFormGroup = this.builder.group({
+      firstName: [this.userRegistrationData.firstName, Validators.required],
+      lastName: [this.userRegistrationData.lastName, Validators.required],
+      email: [this.userRegistrationData.email, [Validators.required, Validators.email]],
+      password: this.password,
+      confirmPassword: [this.userRegistrationData.confirmPassword, [Validators.required, this.passwordMismatchValidator(this.password)]]
+    });
+    this.secondStepFormGroup = this.builder.group({
+      companyName: [this.companyRegistrationData.companyName, Validators.required],
+      serviceType: [{value: this.serviceTypes[0], disabled: true}, Validators.required],
+      serviceUrl: [this.companyRegistrationData.serviceUrl, Validators.required],
+      serviceAPIKey: [this.companyRegistrationData.serviceAPIKey, Validators.required]
+    });
   }
 
-  passwordsMatchValidator(password: AbstractControl): ValidatorFn {
+  ngOnInit() {}
+
+
+  /**
+   * Returns error message for first name field
+   * @returns {string}
+   */
+  getFirstNameErrorMessage() {
+    return this.firstStepFormGroup.get('firstName').hasError('required') ? 'Please, enter your first name' : '';
+  }
+
+  /**
+   * Returns error message for last name
+   * @returns {string}
+   */
+  getLastNameErrorMessage() {
+    return this.firstStepFormGroup.get('lastName').hasError('required') ? 'Please, enter your last name' : '';
+  }
+
+  /**
+   * Returns error message for password field
+   * @returns {string}
+   */
+  getPasswordErrorMessage() {
+    return this.password.hasError('required') ? 'Please, enter your password' : '';
+  }
+
+  /**
+   * Returns error mesage for confirm password field
+   * @returns {string}
+   */
+  getConfirmPasswordErrorMessage() {
+    return this.firstStepFormGroup.get('confirmPassword').hasError('required') ? 'Please, confirm your password' :
+      this.firstStepFormGroup.get('confirmPassword').hasError('passwordsNotMatch') ? 'Passwords must match' : '';
+  }
+
+  /**
+   * Password confirmation field validator
+   * @param {AbstractControl} password - Password control
+   * @returns {ValidatorFn}
+   */
+  passwordMismatchValidator(password: AbstractControl): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} => {
       password.valueChanges.subscribe(() => {
         control.updateValueAndValidity();
@@ -33,23 +98,34 @@ export class RegistrationComponent implements OnInit {
     };
   }
 
-  getSystemNameErrorMessage() {
-    return this.systemName.hasError('required') ? 'You must enter your system name' : '';
+  /**
+   * Returns error message for company name field
+   * @returns {string}
+   */
+  getCompanyNameErrorMessage() {
+    return this.secondStepFormGroup.get('companyName').hasError('required') ? 'Please, enter company name' : '';
   }
 
-
-  getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter your email' :
-      this.email.hasError('email') ? 'Email is not valid' : '';
+  /**
+   * Returns error message for service URL field
+   * @returns {string}
+   */
+  getServiceUrlErrorMessage() {
+    return this.secondStepFormGroup.get('serviceUrl').hasError('required') ? 'Please, enter service URL' : '';
   }
 
-  getPasswordErrorMessage() {
-    return this.password.hasError('required') ? 'You must enter your password' : '';
+  /**
+   * Returns error message for first name field
+   * @returns {string}
+   */
+  getServiceAPIKeyErrorMessage() {
+    return this.secondStepFormGroup.get('serviceAPIKey').hasError('required') ? 'Please, enter service API key' : '';
   }
 
-  getConfirmPasswordErrorMessage() {
-    return this.confirmPassword.hasError('required') ? 'You must confirm your password' :
-      this.confirmPassword.hasError('passwordsNotMatch') ? 'Passwords must match' : '';
+  async register() {
+    const user = await this.account.register(this.userRegistrationData.email, this.userRegistrationData.password);
+    if (user) {
+      //const company
+    }
   }
-
 }
